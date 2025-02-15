@@ -16,7 +16,9 @@ import {Picker} from '@react-native-picker/picker'
 import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Name from './name'
-
+import * as Notifications from "expo-notifications";
+import {Alert} from 'react-native'
+import { Button } from "react-native";
 
 
 export default function Index() {
@@ -31,10 +33,15 @@ export default function Index() {
 
   const getTime =  new Date().getHours();
   
-  const greeting = getTime >= 0 && getTime < 12 ? "Good Morning," : (getTime >= 12 && getTime <= 15 )? "Good Afternoon," : (getTime >=16 && getTime < 18 )? "Good Evening," : "Good Night,"
+  const greeting = getTime >= 0 && getTime < 12 ? "Good Morning," : (getTime >= 12 && getTime <16)? "Good Afternoon," : (getTime >=16 && getTime < 18 )? "Good Evening," : "Good Night,"
 
  
   const router = useRouter()
+
+
+  const [selectedInterval , setSelectedInterval ] = useState("9/12/3/6/9");
+
+
   
 
   const {theme , colorScheme , setColorScheme } = useContext(ThemeContext)
@@ -47,6 +54,88 @@ export default function Index() {
   })
 
 // useEffect to load username
+
+useEffect(() => {
+  (async () => {
+    const { status } = await Notifications.getPermissionsAsync();
+    if (status !== "granted") {
+      await requestPermissions();
+    }
+  })();
+}, []);
+
+
+const requestPermissions = async () => {
+  const {status} = await Notifications.requestPermissionsAsync();
+
+  if ( status != "granted"){
+    Alert.alert("Permission denied! , You need to enable notification Permission from Settings ");
+    return false;
+  }
+  return true;
+}
+
+useEffect( () =>{
+
+  async function loadStoredInterval(){
+    try{
+      const savedInterval = await AsyncStorage.getItem("selectedInterval")
+      if(savedInterval){
+        setSelectedInterval(savedInterval)
+      }
+    }
+    catch(e){
+      console.error(e)
+    }
+  }
+  loadStoredInterval()
+},[])
+
+const handleIntervalChange = async (itemValue) => {
+  const permissionGranted = await requestPermissions(); // Check first
+  if (!permissionGranted) return; // Stop if not granted
+
+  setSelectedInterval(itemValue);
+  await AsyncStorage.setItem("selectedInterval", itemValue);
+  scheduleNotifications(itemValue);
+};
+
+
+const scheduleNotifications = async (interval) => {
+  // 🔹 Check if permission is granted before scheduling notifications
+  const { status } = await Notifications.getPermissionsAsync();
+  if (status !== "granted") {
+    Alert.alert("Permission Needed", "Please enable notifications in settings.");
+    return;
+  }
+
+  await Notifications.cancelAllScheduledNotificationsAsync();
+
+  const times = {
+    "9/12/3/6/9": [9, 12, 15, 18, 21],
+    "10/1/4/7/10": [10, 13, 16, 19, 22],
+    "Morning/Evening": [9, 18],
+  };
+
+  const selectedTimes = times[interval] || [];
+
+  for (let hour of selectedTimes) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Reminder",
+        body: "It's time for your scheduled Reminder!",
+      },
+      trigger: {
+        hour,
+        minute: 0,
+        repeats: true,
+      },
+    });
+  }
+};
+
+
+
 
 useEffect ( () => {
   const fetchName = async()=>{
@@ -223,13 +312,16 @@ useEffect ( () => {
           </Pressable>
           <View style = {styles.priorityBlock}>
             <Text style = {{ color: theme.textColor,fontWeight: 'bold' ,}}>
-              Choose  Notification {"\n"}Reminder Intervals 
+              Reminder Frequency:
             </Text>
             <View style = {[styles.pickerContainer , {marginRight: 15}]}>
               <Picker
-              style = {[styles.picker]}>
+              style = {[styles.picker]}
+              selectedValue={selectedInterval}
+              onValueChange={handleIntervalChange}>
                 <Picker.Item label = "9/12/3/6/9" value = "9/12/3/6/9" />
                 <Picker.Item label = "10/1/4/7/10" value = "10/1/4/7/10" />
+                <Picker.Item label = "Morning/Evening" value = "Morning/Evening" />
               </Picker>
             </View>
           </View>
