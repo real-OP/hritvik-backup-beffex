@@ -16,6 +16,7 @@ import {Picker} from '@react-native-picker/picker'
 import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Name from './name'
+import * as notif from '@/app/notifications'
 
 
 
@@ -212,13 +213,7 @@ useEffect ( () => {
               </Picker>
             </View>
           </View>
-          <Pressable style={styles.saveButton} onPress={() => {
-            if (text.trim()) {
-              const newId = todos.length === 0 ? 1 : todos[0].id + 1;
-              setTodos([{ id: newId, title: text, completed: false, priority: taskPriority }, ...todos]);
-              setText('');
-            }
-          }}>
+          <Pressable style={styles.saveButton} onPress={addTodo}>
             <Text style={styles.saveButtonText}>SAVE</Text>
           </Pressable>
           <View style = {styles.priorityBlock}>
@@ -233,6 +228,7 @@ useEffect ( () => {
               </Picker>
             </View>
           </View>
+          <Pressable style= {[styles.saveButton,{width:'100%'}]} onPress= {()=>{router.push('/notifications')}}><Text style= {styles.saveButtonText}>NOTIFICATION SETUP</Text></Pressable>
         </View>
       ) : (
         <Name setUserName={setUserName} />
