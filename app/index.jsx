@@ -217,20 +217,8 @@ useEffect ( () => {
           <Pressable style={styles.saveButton} onPress={addTodo}>
             <Text style={styles.saveButtonText}>SAVE</Text>
           </Pressable>
-          <View style = {styles.priorityBlock}>
-            <Text style = {{ color: theme.textColor,fontWeight: 'bold' ,}}>
-              Choose  Notification {"\n"}Reminder Intervals 
-            </Text>
-            <View style = {[styles.pickerContainer , {marginRight: 15}]}>
-              <Picker
-              dropdownIconColor={theme.textColor}
-              style = {[styles.picker]}>
-                <Picker.Item label = "9/12/3/6/9" value = "9/12/3/6/9" />
-                <Picker.Item label = "10/1/4/7/10" value = "10/1/4/7/10" />
-              </Picker>
-            </View>
-          </View>
-          <Pressable style= {[styles.saveButton,{width:'100%'}]} onPress= {()=>{router.push('/notifications')}}><Text style= {styles.saveButtonText}>NOTIFICATION SETUP</Text></Pressable>
+          
+          <Pressable style= {[styles.saveButton,{width:'90%'}]} onPress= {()=>{router.push('/notifications')}}><Text style= {styles.saveButtonText}>NOTIFICATION SETUP</Text></Pressable>
         </View>
       ) : (
         <Name setUserName={setUserName} />
@@ -324,6 +312,7 @@ function createStyles(theme , colorScheme) {
         borderRadius: 5,
         padding: 5,
         width: 60,
+        marginBottom: 30,
       },
       saveButtonText:{
         fontWeight: 'bold',

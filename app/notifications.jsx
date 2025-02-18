@@ -24,20 +24,20 @@ Notifications.addNotificationReceivedListener(async () => {
 });
 
 // Function to cancel all existing notifications and schedule a new one
-async function schedulePushNotification() {
+async function schedulePushNotification(title,body) {
   console.log("Cancelling existing notifications...");
   await Notifications.cancelAllScheduledNotificationsAsync(); // Stop previous notifications
 
   console.log("Scheduling new notification...");
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "You've got mail! 📬",
-      body: "Here is the notification body",
+      title: title || "You've got a Reminder 📬",
+      body: body || "You've come so far, you cant stop now💪",
       data: { data: "extra data goes here" },
     },
     trigger: {
       type: 'timeInterval',
-      seconds: 15, // Appears after 10 seconds
+      seconds: 5, // Appears after 10 seconds
       repeats: false, // Ensures it does NOT repeat
     },
   });
@@ -81,12 +81,19 @@ export default function ReminderScreen() {
                 style={styles.picker}
                 onValueChange={(itemValue) => setSelectedTime(itemValue)}
             >
-                <Picker.Item label="08:00 AM" value="08:00 AM" />
-                <Picker.Item label="12:00 PM" value="12:00 PM" />
-                <Picker.Item label="06:00 PM" value="06:00 PM" />
-                <Picker.Item label="09:00 PM" value="09:00 PM" />
+                <Picker.Item label = "9am/12pm/3pm/6pm/9pm" value = "9am/12pm/3pm/6pm/9pm" />
+                <Picker.Item label = "10am/1pm/4pm/7pm/10pm" value = "10am/1pm/4pm/7pm/10pm" />
+                <Picker.Item label="Morning/Evening" value="Morning/Evening" />
+                <Picker.Item label="Custom Reminder Timing" value="Custom Reminder Timing" />
             </Picker>
           </View>
+          {/*Show textInput to enter custom reminder notification timing */}
+          {selectedTime === "Custom Reminder Timing" &&(
+            <TextInput
+            style={styles.input}
+            placeholder='AM/PM'
+            placeholderTextColor="rgb(113, 121, 126)" />
+          )}
           
           <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Confirm Reminder</Text>
@@ -95,7 +102,7 @@ export default function ReminderScreen() {
           <Button
               title="Press to schedule a notification"
               onPress={async () => {
-                  await schedulePushNotification();
+                  await schedulePushNotification(title,body);
               }}
           />
       </SafeAreaProvider>
@@ -155,6 +162,7 @@ function createStyles(theme, colorScheme) {
         borderRadius: 5,
         borderWidth: 2,
         borderColor: theme.iconColor,
+        marginBottom: 10,
       },
   });
 }
