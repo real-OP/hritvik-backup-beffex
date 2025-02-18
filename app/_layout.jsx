@@ -11,6 +11,7 @@ export default function RootLayout() {
       headerLeft: () =>
       (<FontAwesome5 name="bell" size={24} color="white" style = {{marginLeft: 10 , marginRight: 6}} />) }}/>
       <Stack.Screen  name = 'name' options= {{}} />
+      <Stack.Screen  name = 'notifications' options= {{headerShown:false}} />
     </Stack>
     </ThemeProvider>
     

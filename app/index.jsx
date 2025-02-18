@@ -202,6 +202,7 @@ useEffect ( () => {
             </Text>
             <View style = {styles.pickerContainer}>
               <Picker
+              dropdownIconColor={theme.textColor}
               style = {styles.picker}
               selectedValue = {taskPriority}
               onValueChange = { prio => setTaskPriority(prio) }
@@ -222,6 +223,7 @@ useEffect ( () => {
             </Text>
             <View style = {[styles.pickerContainer , {marginRight: 15}]}>
               <Picker
+              dropdownIconColor={theme.textColor}
               style = {[styles.picker]}>
                 <Picker.Item label = "9/12/3/6/9" value = "9/12/3/6/9" />
                 <Picker.Item label = "10/1/4/7/10" value = "10/1/4/7/10" />
