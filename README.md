@@ -1,50 +1,67 @@
-# Welcome to your Expo app 👋
+# Beffex
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Beffex is a React Native application built using Expo, designed to help users manage their tasks efficiently. The app features a simple and intuitive interface, allowing users to set task priorities and schedule daily reminder notifications.
 
-## Get started
+## Features
+- **Task Management**: Add and prioritize tasks seamlessly.
+- **Persistent User Data**: Stores user preferences and names using AsyncStorage.
+- **Daily Notifications**: Set recurring local notifications based on user-selected times.
+- **Expo Integration**: Leveraging Expo Notifications for smooth performance.
 
-1. Install dependencies
-
-   ```bash
+## Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/beffex.git
+   ```
+2. Navigate to the project folder:
+   ```sh
+   cd beffex
+   ```
+3. Install dependencies:
+   ```sh
    npm install
    ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
+4. Start the Expo development server:
+   ```sh
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## Usage
+1. Launch the app using an emulator or a physical device.
+2. Set your name (stored using AsyncStorage).
+3. Add tasks and assign priority levels.
+4. Choose preferred notification times from the picker.
+5. Receive scheduled reminders in the notification tray.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+## File Structure
+```
+beffex/
+│-- app/
+│   ├── layout.jsx      # Handles app layout
+│   ├── index.jsx       # Main screen and task management
+│   ├── name.jsx        # User name input screen
+│   ├── notifications.jsx # Manages notification scheduling
+│-- package.json
+│-- App.js
+│-- README.md
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Dependencies
+- React Native
+- Expo
+- Expo Notifications
+- AsyncStorage
 
-## Learn more
+## Contributing
+Contributions are welcome! Feel free to fork the repository and submit a pull request with improvements.
 
-To learn more about developing your project with Expo, look at the following resources:
+## License
+This project is licensed under the MIT License.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Contact
+For questions or suggestions, feel free to reach out via GitHub Issues.
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+Happy coding! 🚀
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
