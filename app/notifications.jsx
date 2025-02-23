@@ -6,6 +6,8 @@ import { TextInput, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeContext } from '@/context/ThemeContext';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // Set notification handler
 Notifications.setNotificationHandler({
@@ -33,10 +35,17 @@ function isValidTimeFormat(time) {
 
 // Function to cancel all existing notifications and schedule a new one
 async function schedulePushNotification(title, body, times) {
+
   await Notifications.cancelAllScheduledNotificationsAsync();
+
+  await new Promise(resolve => setTimeout(resolve, 100));
 
   const now = new Date();
 
+  // Store the number of notifications scheduled by the user in AsyncStorage
+  const notifSchedByUser = times.length.toString(); // Get count and convert to string
+  await AsyncStorage.setItem("scheduledNotificationCount", notifSchedByUser);
+  
   for (const time of times) {
     if (!isValidTimeFormat(time)) {
       Alert.alert('Invalid Time Format', 'Please enter time in HH:mm format.');
@@ -57,8 +66,8 @@ async function schedulePushNotification(title, body, times) {
 
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: title || "You've got a Reminder 📬",
-        body: body || "You've come so far, you can't stop now💪",
+        title: title || "🚀Time to Level Up! No Excuses, Just Action! 🔥",
+        body: body || "Your goals won't wait! ⏳, Check Your Tasks!💪",
       },
       trigger: {
         type:'timeInterval',
@@ -110,9 +119,33 @@ export default function ReminderScreen() {
       console.log("Notification permissions checked.");
     });
   
-    const subscription = Notifications.addNotificationReceivedListener(() => {
+    const subscription = Notifications.addNotificationReceivedListener(async () => {
       console.log("Notification received. ");
+
+      // Get the count of received notifications
+      let receivedNotificationCount = await AsyncStorage.getItem("receivedNotificationCount");
+      receivedNotificationCount = receivedNotificationCount ? parseInt(receivedNotificationCount) + 1 : 1;
       
+      // Store the updated count in AsyncStorage
+      await AsyncStorage.setItem("receivedNotificationCount", String(receivedNotificationCount));
+      
+      // Retrieve the total number of scheduled notifications
+      const storedNotificationCount = await AsyncStorage.getItem("scheduledNotificationCount");
+      const totalNotificationsScheduled = storedNotificationCount ? parseInt(storedNotificationCount) : 0;
+      // Check if all scheduled notifications have been received
+
+      const scheduledCount = await AsyncStorage.getItem("scheduledNotificationCount");
+
+      if (receivedNotificationCount >= totalNotificationsScheduled) {
+        
+        console.log("All notifications received, clearing queue!");
+        await Notifications.cancelAllScheduledNotificationsAsync();
+    
+        // Reset Counters After Completion
+        await AsyncStorage.removeItem("receivedNotificationCount");
+        await AsyncStorage.removeItem("scheduledNotificationCount");
+      }
+    
     });
   
     return () => {
