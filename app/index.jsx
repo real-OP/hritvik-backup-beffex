@@ -16,6 +16,7 @@ import {Picker} from '@react-native-picker/picker'
 import { useRouter } from "expo-router";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Name from './name'
+import * as notif from '@/app/notifications'
 
 
 
@@ -201,6 +202,7 @@ useEffect ( () => {
             </Text>
             <View style = {styles.pickerContainer}>
               <Picker
+              dropdownIconColor={theme.textColor}
               style = {styles.picker}
               selectedValue = {taskPriority}
               onValueChange = { prio => setTaskPriority(prio) }
@@ -212,27 +214,11 @@ useEffect ( () => {
               </Picker>
             </View>
           </View>
-          <Pressable style={styles.saveButton} onPress={() => {
-            if (text.trim()) {
-              const newId = todos.length === 0 ? 1 : todos[0].id + 1;
-              setTodos([{ id: newId, title: text, completed: false, priority: taskPriority }, ...todos]);
-              setText('');
-            }
-          }}>
+          <Pressable style={styles.saveButton} onPress={addTodo}>
             <Text style={styles.saveButtonText}>SAVE</Text>
           </Pressable>
-          <View style = {styles.priorityBlock}>
-            <Text style = {{ color: theme.textColor,fontWeight: 'bold' ,}}>
-              Choose  Notification {"\n"}Reminder Intervals 
-            </Text>
-            <View style = {[styles.pickerContainer , {marginRight: 15}]}>
-              <Picker
-              style = {[styles.picker]}>
-                <Picker.Item label = "9/12/3/6/9" value = "9/12/3/6/9" />
-                <Picker.Item label = "10/1/4/7/10" value = "10/1/4/7/10" />
-              </Picker>
-            </View>
-          </View>
+          
+          <Pressable style= {[styles.saveButton,{width:'90%'}]} onPress= {()=>{router.push('/notifications')}}><Text style= {styles.saveButtonText}>NOTIFICATION SETUP</Text></Pressable>
         </View>
       ) : (
         <Name setUserName={setUserName} />
@@ -326,6 +312,7 @@ function createStyles(theme , colorScheme) {
         borderRadius: 5,
         padding: 5,
         width: 60,
+        marginBottom: 30,
       },
       saveButtonText:{
         fontWeight: 'bold',

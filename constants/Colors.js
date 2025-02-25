@@ -7,6 +7,7 @@ export const Colors = {
         buttonColor: 'rgb(94, 52, 145)',
         blockColor: 'white',
         headingColor: 'blue',
+        reminderHeadingColor: 'rgb(41, 17, 70)',
 
 
     },
@@ -19,5 +20,6 @@ export const Colors = {
         buttonColor:' rgb(86, 65, 255)',
         blockColor: 'rgb(37, 41, 54)',
         headingColor: 'white',
+        reminderHeadingColor: 'rgb(148, 131, 196)',
     }
 }
